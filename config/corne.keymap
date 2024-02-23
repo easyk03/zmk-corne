@@ -7,50 +7,147 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/outputs.h>
+
+#define DEFAULT 0
+#define NUM     1
+#define FN      2
+#define APP     3
+#define SYSTEM  4
+
+&lt { quick-tap-ms = <200>; };
+&mt { quick-tap-ms = <200>; };
 
 / {
-        keymap {
-                compatible = "zmk,keymap";
 
-                default_layer {
-// -----------------------------------------------------------------------------------------
-// |  TAB |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U   |  I  |  O  |  P  | BKSP |
-// | CTRL |  A  |  S  |  D  |  F  |  G  |   |  H  |  J   |  K  |  L  |  ;  |  '   |
-// | SHFT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M   |  ,  |  .  |  /  | ESC  |
-//                    | GUI | LWR | SPC |   | ENT | RSE  | ALT |
-                        bindings = <
-   &kp TAB   &kp Q &kp W &kp E &kp R &kp T   &kp Y &kp U  &kp I     &kp O   &kp P    &kp BSPC
-   &kp LCTRL &kp A &kp S &kp D &kp F &kp G   &kp H &kp J  &kp K     &kp L   &kp SEMI &kp SQT
-   &kp LSHFT &kp Z &kp X &kp C &kp V &kp B   &kp N &kp M  &kp COMMA &kp DOT &kp FSLH &kp ESC
-                  &kp LGUI &mo 1 &kp SPACE   &kp RET &mo 2 &kp RALT
-                        >;
-                };
-                lower_layer {
-// -----------------------------------------------------------------------------------------
-// |  TAB |  1  |  2  |  3  |  4  |  5  |   |  6  |  7  |  8  |  9  |  0  | BKSP |
-// | BTCLR| BT1 | BT2 | BT3 | BT4 | BT5 |   | LFT | DWN |  UP | RGT |     |      |
-// | SHFT |     |     |     |     |     |   |     |     |     |     |     |      |
-//                    | GUI |     | SPC |   | ENT |     | ALT |
-                        bindings = <
-   &kp TAB    &kp N1       &kp N2       &kp N3       &kp N4       &kp N5         &kp N6   &kp N7   &kp N8 &kp N9    &kp N0 &kp BSPC
-   &bt BT_CLR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4   &kp LEFT &kp DOWN &kp UP &kp RIGHT &trans &trans
-   &kp LSHFT  &trans       &trans       &trans       &trans       &trans         &trans   &trans   &trans &trans    &trans &trans
-                                    &kp LGUI     &trans       &kp SPACE      &kp RET  &trans   &kp RALT
-                        >;
-                };
+  behaviors {
+    
+    graves: grave_escape {
+      compatible = "zmk,behavior-mod-morph";
+      #binding-cells = <0>;
+      bindings = <&lhp NUM GRAVE>, <&kp ESC>;
+      mods = <(MOD_LGUI|MOD_RGUI)>;
+    };
+      
+    hm: homerow_mods {
+      compatible = "zmk,behavior-hold-tap";
+      label = "HOMEROW_MODS";
+      #binding-cells = <2>;
+      tapping_term_ms = <300>;
+      quick-tap-ms = <300>;
+      flavor = "tap-preferred";
+      bindings = <&kp>, <&kp>;
+    };
 
-                raise_layer {
-// -----------------------------------------------------------------------------------------
-// |  TAB |  !  |  @  |  #  |  $  |  %  |   |  ^  |  &  |  *  |  (  |  )  | BKSP |
-// | CTRL |     |     |     |     |     |   |  -  |  =  |  [  |  ]  |  \  |  `   |
-// | SHFT |     |     |     |     |     |   |  _  |  +  |  {  |  }  | "|" |  ~   |
-//                    | GUI |     | SPC |   | ENT |     | ALT |
-                        bindings = <
-   &kp  TAB  &kp EXCL &kp AT &kp HASH &kp DLLR &kp PRCNT   &kp CARET &kp AMPS  &kp KP_MULTIPLY &kp LPAR &kp RPAR &kp BSPC
-   &kp LCTRL &trans   &trans &trans   &trans   &trans      &kp MINUS &kp EQUAL &kp LBKT        &kp RBKT &kp BSLH &kp GRAVE
-   &kp LSHFT &trans   &trans &trans   &trans   &trans      &kp UNDER &kp PLUS  &kp LBRC        &kp RBRC &kp PIPE &kp TILDE
-                             &kp LGUI &trans   &kp SPACE   &kp RET   &trans    &kp RALT
-                        >;
-                };
-        };
+    hmt: homerow_mods_no_quicktap {
+      compatible = "zmk,behavior-hold-tap";
+      label = "HOMEROW_MODS";
+      #binding-cells = <2>;
+      tapping_term_ms = <200>;
+      quick-tap-ms = <200>;
+      flavor = "balanced";
+      bindings = <&kp>, <&kp>;
+    };
+
+    ltp: layer_tap_prefered {
+      compatible = "zmk,behavior-hold-tap";
+      label = "LAYER_TAP_PREFERED";
+      #binding-cells = <2>;
+      tapping_term_ms = <200>;
+      quick-tap-ms = <200>;
+      flavor = "balanced";
+      bindings = <&mo>, <&kp>;
+    };
+
+    lhp: layer_hold_prefered {
+      compatible = "zmk,behavior-hold-tap";
+      label = "LAYER_HOLD_PREFERED";
+      #binding-cells = <2>;
+      tapping_term_ms = <250>;
+      flavor = "hold-preferred";
+      bindings = <&mo>, <&kp>;
+    };
+  };
+
+  keymap {
+    compatible = "zmk,keymap";
+
+    // default_layer {
+    //   label = "Default";
+    //   bindings = <
+
+    //      &kp ESC         &kp Q          &kp W            &kp E   &kp R   &kp T         &kp Y      &kp U     &kp I       &kp O      &kp P             &kp LBKT
+    //      &lhp NUM TAB   &hm LSHFT A    &kp S            &kp D   &kp F   &kp G         &kp H      &kp J     &kp K       &kp L      &hm RSHFT SEMI    &kp APOS
+    //      &kp GRAVE       &hm LCTRL Z    &kp X            &kp C   &kp V   &kp B         &kp N      &kp M     &kp COMMA   &kp DOT    &mt BSLH FSLH     &kp RBKT
+    //      &hm LALT LA(B)   &hm LGUI SPACE   &ltp APP LG(SPACE)          &kp ENTER            &lhp NUM BSPC          &ltp FN DEL
+    //     >;
+    // };
+
+        default_layer {
+        label = "Default";
+        bindings = <
+                &graves         &kp Q          &kp W            &kp E   &kp R   &kp T         &kp Y      &kp U     &kp I       &kp O      &kp P             &kp LBKT
+                &hm LS(TAB) TAB   &hm LSHFT A    &kp S            &kp D   &kp F   &kp G         &kp H      &kp J     &kp K       &kp L      &hm RSHFT SEMI    &kp APOS
+                &kp LC(LA(A))   &hm LCTRL Z    &kp X            &kp C   &kp V   &kp B         &kp N      &kp M     &kp COMMA   &kp DOT    &mt BSLH FSLH     &kp RBKT
+                &hm LALT LA(B)   &hm LGUI SPACE   &ltp APP LG(SPACE)            &kp ENTER      &lhp NUM BSPC          &ltp FN DEL
+        >;
+  };
+
+        num_layer {
+        label="Num";
+        bindings = <
+                &trans     &kp EXCL &kp AT &kp HASH &kp DLLR &kp PERCENT        &kp CARET   &kp AMPS      &kp UP      &kp LPAR    &kp RPAR    &kp LA(LS(MINUS))
+                &trans     &hm LSHFT N1 &kp N2 &kp N3 &kp N4 &kp N5             &kp STAR    &kp LEFT      &kp DOWN    &kp RIGHT   &kp MINUS   &kp PLUS 
+                &trans     &hm LCTRL N6 &kp N7 &kp N8 &kp N9 &kp N0             &none       &kp LC(LA(A)) &none       &none       &kp UNDER    &kp EQUAL 
+                &trans &trans &kp BSPC                                          &mo SYSTEM  &trans      &trans
+
+      >;
+    };
+
+        fn_layer {
+        label = "Fn";
+        bindings = <
+                &trans  &kp C_BRI_DN  &kp C_BRI_UP  &kp LC(UP)  &kp F4  &kp F5        &kp F6    &kp F7          &kp C_PP  &kp C_MUTE  &kp C_VOL_DN  &kp C_VOL_UP
+                &trans  &none         &none         &none       &none   &none         &none     &none           &none     &none       &none         &none
+                &trans  &none         &none         &none       &none   &none         &none     &kp LC(LA(A))   &none     &none       &none         &none
+                &kp LC(LG(Q))  &trans        &trans                                   &trans    &trans          &trans  
+
+      >;
+    };
+
+    // app_layer {
+    //   label = "App";
+    //   bindings = <  
+      
+    //          &trans  &kp LC(LEFT)       &kp LEFT             &kp LC(UP)              &kp RIGHT                &kp LC(RIGHT)                  &none   &none           &none     &none       &none         &none
+    //          &trans  &hm LSHFT N1       &kp N2               &kp N3                  &kp N4                   &kp N5                         &kp LG(H)   &none           &none     &none       &none         &none
+    //          &trans  &hm LCTRL N6       &kp N7               &kp N8                  &kp N9                   &kp N0                         &none   &kp LC(LA(A))   &none     &none       &none         &none
+    //          &kp LG(LS(N4))             &kp LC(LG(SPACE))    &trans                                                                          &trans  &trans          &trans
+    //   >;
+    // };
+
+    app_layer {
+      label = "App";
+      bindings = <  
+      
+        &trans  &kp LC(LEFT)       &kp LEFT             &kp LC(UP)              &kp RIGHT                &kp LC(RIGHT)              &none   &none           &none     &none       &none         &none
+        &trans  &none              &kp LC(LA(LEFT))     &kp LC(LA(DOWN))        &kp LC(LA(RIGHT))        &kp LC(LA(UP))                &kp LG(H)   &none           &none     &none       &none         &none
+        &trans  &kp LC(LA(J))      &kp LC(LA(U))        &kp LC(LA(I))           &kp LC(LA(K))            &kp LC(LA(ENTER))          &none   &kp LC(LA(A))   &none     &none       &none         &none
+        &kp LG(LS(N4))             &kp LC(LG(SPACE))    &trans                                                                      &trans  &trans          &trans
+      >;
+    };
+
+    system_layer {
+
+      label = "System";
+      bindings = <
+   
+        &trans  &bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2    &bt BT_SEL 3    &bt BT_CLR           &none        &none        &none        &none        &none   &none
+        &trans  &none           &none           &none           &bt BT_SEL 4    &bt BT_SEL 5         &none        &none        &none        &none        &none   &none
+        &trans  &none           &none           &none           &none           &none                &none        &none        &none        &none        &none   &none
+                                &none           &none           &kp N1                               &none        &none        &none
+      >;
+    };
+  };
+  
 };
