@@ -141,8 +141,8 @@
       label = "App";
       bindings = <  
       
-        &trans  &kp LC(LEFT)       &kp LEFT             &kp LC(UP)              &kp RIGHT                &kp LC(RIGHT)              &none   &none           &none     &none       &none         &none
-        &trans  &none              &kp LC(LA(LEFT))     &kp LC(LA(DOWN))        &kp LC(LA(RIGHT))        &kp LC(LA(UP))                &kp LG(H)   &none           &none     &none       &none         &none
+        &trans  &kp LC(LEFT)       &kp LC(LEFT)         &kp LC(UP)          &kp LC(RIGHT)            &kp LC(RIGHT)                  &none   &none           &none     &none       &none         &none
+        &trans  &none              &kp LC(LA(LEFT))     &kp LC(LA(DOWN))        &kp LC(LA(RIGHT))        &kp LC(LA(UP))             &kp LG(H)   &none           &none     &none       &none         &none
         &trans  &kp LC(LA(J))      &kp LC(LA(U))        &kp LC(LA(I))           &kp LC(LA(K))            &kp LC(LA(ENTER))          &none   &kp LC(LA(A))   &none     &none       &none         &none
         &kp LG(LS(N4))             &kp LC(LG(SPACE))    &trans                                                                      &trans  &trans          &trans
       >;
